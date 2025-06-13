@@ -1,0 +1,9 @@
+FROM node:19.0.0
+
+WORKDIR /usr/src/app
+
+ARG FRONTEND_TEMPLATE_REPO
+
+RUN git clone $FRONTEND_TEMPLATE_REPO .
+
+RUN npm install
