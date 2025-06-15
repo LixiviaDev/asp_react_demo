@@ -11,6 +11,12 @@ services:
     environment:
       ACCEPT_EULA: ${BACKEND_ACCEPT_EULA}
       MSSQL_SA_PASSWORD: ${BACKEND_PASSWORD}
+    healthcheck:
+      test: ["CMD", "bash", "-c", "exec 3<>/dev/tcp/localhost/1433"]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+      start_period: 10s
   asp_demo_frontend:
     container_name: asp_demo_frontend
     build:
@@ -33,6 +39,9 @@ services:
     networks:
       - db-network
       - api-network
+    depends_on:
+      asp_demo_db:
+        condition: service_healthy
     command: dotnet watch
   asp_demo_proxy:
     container_name: asp_demo_proxy
@@ -46,6 +55,9 @@ services:
       - frontend-volume:/etc/nginx/frontend
     networks:
       - api-network
+    depends_on:
+      asp_demo_db:
+        condition: service_healthy
 
 networks:
   db-network:

@@ -4,6 +4,6 @@ VOLUME sqlserverdb
 
 WORKDIR /usr/src/db
 
-COPY zepto_v2.csv .
+COPY . .
 
 EXPOSE 1433
